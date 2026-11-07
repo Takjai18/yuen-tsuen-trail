@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "yuen-tsuen-trail",
+  "compatibility_date": "2026-11-07",
+  "account_id": "db0374b37171e14e52b085a4b4f0d1dc",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
