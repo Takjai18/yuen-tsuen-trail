@@ -25,6 +25,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import { ElevationProfile, RouteSketch } from './RouteVisuals.tsx';
+import { WeatherBanner, WeatherCard, useHkoWeather } from './WeatherCard.tsx';
 import {
   CHECKPOINTS,
   INITIAL_CHECKLIST,
@@ -73,6 +74,7 @@ export default function App() {
   const [checkedItems, setCheckedItems] = useState<string[]>(() => readJson<string[]>(STORAGE_KEYS.checks, []));
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [theme, setTheme] = useState<ThemeName>(readTheme);
+  const weather = useHkoWeather();
 
   const applyTheme = (next: ThemeName) => {
     setTheme(next);
@@ -192,8 +194,19 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-md px-4 pt-4">
+        {activeTab !== 'guide' && weather.report && weather.report.severity !== 'ok' && (
+          <div className="mb-4">
+            <WeatherBanner report={weather.report} />
+          </div>
+        )}
         {activeTab === 'guide' && (
           <div className="space-y-4">
+            <WeatherCard
+              report={weather.report}
+              error={weather.error}
+              loading={weather.loading}
+              onRefresh={() => void weather.reload()}
+            />
             <div className="rounded-2xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--card)] p-3.5 shadow-[var(--shadow)]">
               <div className="mb-2 flex items-center justify-between">
                 <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
