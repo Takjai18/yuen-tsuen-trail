@@ -2,7 +2,6 @@ import { useState, type MouseEvent } from 'react';
 import {
   AlertTriangle,
   ArrowLeftRight,
-  Bus,
   Camera,
   CheckCircle2,
   CheckSquare,
@@ -22,9 +21,12 @@ import {
   ShieldAlert,
   Sparkles,
   Sun,
+  Sunset,
   Utensils,
 } from 'lucide-react';
+import { EatsPanel } from './EatsPanel.tsx';
 import { ElevationProfile, RouteSketch } from './RouteVisuals.tsx';
+import { SunsetPanel } from './SunsetPanel.tsx';
 import { WeatherBanner, WeatherCard, useHkoWeather } from './WeatherCard.tsx';
 import {
   CHECKPOINTS,
@@ -64,7 +66,7 @@ function focusStep(id: number) {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'guide' | 'photo' | 'food' | 'prep'>('guide');
+  const [activeTab, setActiveTab] = useState<'guide' | 'photo' | 'sunset' | 'food' | 'prep'>('guide');
   const [routeMode, setRouteMode] = useState<RouteMode>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.mode);
     return saved === 'A' || saved === 'B' ? saved : 'B';
@@ -479,65 +481,9 @@ export default function App() {
           </div>
         )}
 
-        {activeTab === 'food' && (
-          <div className="space-y-4">
-            <div className="space-y-3 rounded-2xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--card)] p-4 shadow-[var(--shadow)]">
-              <h2 className="flex items-center gap-2 text-base font-bold">
-                <Bus className="h-5 w-5 text-[var(--accent)]" />
-                起點交通：點樣去「荃灣港安醫院」？
-              </h2>
-              <p className="text-xs text-[var(--muted)]">
-                落車站名認住<strong className="text-[var(--text)]">「荃灣港安醫院 (Tsuen Wan Adventist Hospital)」</strong>，落車後過對面馬路引水道旁就係上山石級入口。
-              </p>
-              <div className="space-y-2 text-xs">
-                <div className="rounded-xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--chip)] p-3">
-                  <div className="font-bold text-[var(--accent-soft-text)]">🚐 專線小巴（最快最密）</div>
-                  <p className="mt-1">
-                    <strong>84 號小巴：</strong>由荃灣眾安街（千色匯附近）開出，途經港安醫院，車程約 10 分鐘。
-                  </p>
-                </div>
-                <div className="rounded-xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--chip)] p-3">
-                  <div className="font-bold text-[var(--accent-soft-text)]">🚌 九巴路線（港鐵荃灣站／荃灣西站上車）</div>
-                  <p className="mt-1">
-                    可乘搭 <strong>30、30X、39A、39M</strong> 等途經荃景圍／港安醫院嘅巴士，喺「荃灣港安醫院」站落車。
-                  </p>
-                </div>
-              </div>
-            </div>
+        {activeTab === 'sunset' && <SunsetPanel />}
 
-            <div className="space-y-3 rounded-2xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--card)] p-4 shadow-[var(--shadow)]">
-              <h2 className="flex items-center gap-2 text-base font-bold">
-                <Utensils className="h-5 w-5 text-[var(--profile-steep)]" />
-                終點獎勵：深井必食推介
-              </h2>
-              <p className="text-xs text-[var(--muted)]">行完 3 個幾鐘落到深井市中心，以下係影片介紹同埋山友最愛嘅醫肚之選：</p>
-              <div className="space-y-2.5 text-xs">
-                <div className="rounded-xl border-[length:var(--bw)] border-[var(--amber-line)] bg-[var(--amber-bg)] p-3 text-[var(--amber-text)]">
-                  <div className="text-sm font-bold">🍜 手打炸魚塊／腐皮墨魚丸米線</div>
-                  <p className="mt-1 leading-relaxed">
-                    影片重點推介！深井街頭人氣米線小店（如文記／本地特色粉麵店），必點即叫即炸嘅香脆手打炸魚塊、炸腐皮同埋海鮮米線，行完山飲啖熱湯超滿足！
-                  </p>
-                </div>
-                <div className="rounded-xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--chip)] p-3">
-                  <div className="text-sm font-bold">🦢 深井馳名炭火／明爐燒鵝</div>
-                  <p className="mt-1 leading-relaxed text-[var(--muted)]">
-                    嚟到深井點少得燒鵝！（例如裕記、陳記、能記等），皮脆肉嫩，配碗瀨粉或者白飯一流。
-                  </p>
-                </div>
-                <div className="rounded-xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--chip)] p-3">
-                  <div className="text-sm font-bold">🥩 本地茶餐廳香煎豬扒麵 ＋ 凍檸茶</div>
-                  <p className="mt-1 leading-relaxed text-[var(--muted)]">
-                    深井村內有多間傳統茶記同冰室，一個人行山想快食，叫碗香煎豬扒公仔麵配杯大凍檸茶就最嘆。
-                  </p>
-                </div>
-              </div>
-              <div className="border-t border-[var(--line)] pt-2 text-xs text-[var(--muted)]">
-                <span className="font-bold text-[var(--text)]">🚌 深井回程交通：</span>
-                青山公路（深井段）有大量巴士（如 52X 往旺角、53 往荃灣、234A / 234B 往荃灣西站、952 過海往港島）及小巴（96 / 96M 往荃灣港鐵站），班次極密。
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === 'food' && <EatsPanel />}
 
         {activeTab === 'prep' && (
           <div className="rounded-2xl border-[length:var(--bw)] border-[var(--line)] bg-[var(--card)] p-4 shadow-[var(--shadow)]">
@@ -633,13 +579,14 @@ export default function App() {
       )}
 
       <nav className="bottom-nav fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--line)] bg-[var(--nav)] backdrop-blur-md">
-        <div className="mx-auto grid max-w-md grid-cols-4 px-2 py-1.5">
+        <div className="mx-auto grid max-w-md grid-cols-5 px-1 py-1.5">
           {(
             [
-              ['guide', '實況導航', Compass],
-              ['photo', '打卡秘笈', Camera],
-              ['food', '交通美食', Utensils],
-              ['prep', '行前準備', CheckSquare],
+              ['guide', '導航', Compass],
+              ['photo', '打卡', Camera],
+              ['sunset', '日落', Sunset],
+              ['food', '深井食', Utensils],
+              ['prep', '準備', CheckSquare],
             ] as const
           ).map(([id, label, Icon]) => (
             <button
@@ -651,9 +598,9 @@ export default function App() {
               }`}
             >
               <Icon className="mb-0.5 h-5 w-5" />
-              <span className="text-[11px]">{label}</span>
+              <span className="text-[10px] leading-none">{label}</span>
               {id === 'prep' && checkedItems.length < INITIAL_CHECKLIST.length && (
-                <span className="absolute right-5 top-1.5 h-2 w-2 rounded-full bg-amber-500" />
+                <span className="absolute right-2 top-1 h-2 w-2 rounded-full bg-amber-500" />
               )}
             </button>
           ))}
